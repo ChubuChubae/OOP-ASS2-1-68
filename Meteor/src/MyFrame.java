@@ -17,7 +17,7 @@ public class MyFrame extends JFrame {
         meteor[0] = new JLabel("123");
         meteor[0].setForeground(Color.white);
         meteor[0].setLocation(100,100);
-        meteor[0].setSize(200,200);
+        meteor[0].setSize(100,100);
         thread[0] = new MyThread(meteor[0],5);
         thread[0].start();
         meteor[0].setIcon(image);

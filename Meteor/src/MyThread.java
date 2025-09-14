@@ -5,6 +5,8 @@ public class MyThread extends Thread {
     JLabel label;
     int velocity;
     int direction = 1;
+    int dx = 5; // ความเร็วในแนวแกน X
+    int dy = 5; // ความเร็วในแนวแกน Y
 
     public MyThread(JLabel label, int velocity) {
         this.label = label;
@@ -14,15 +16,16 @@ public class MyThread extends Thread {
     @Override
     public void run() {
         while (true) {
-            int newY = label.getY() + (5 * direction);
-            int newX = label.getX() + (5*direction);
+            int newX = label.getX() + dx;
+            int newY = label.getY() + dy;
 //            // ถ้าชนขอบล่างหรือบน ให้เปลี่ยนทิศทาง
-            if (newY >= 250 || newY <= 0) {
-                direction *= -1;
+            if (newY <= 0 || newY + label.getHeight() >= label.getParent().getHeight()) {
+                dy *= -1;
             }
-           else if (newX >= 250 || newX <= 0) {
-                direction *= -1;
+           else if (newX <= 0 || newX + label.getWidth() >= label.getParent().getWidth()) {
+                dx *= -1;
             }
+
 
             label.setLocation(newX, newY);
 
