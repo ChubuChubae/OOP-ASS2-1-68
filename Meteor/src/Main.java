@@ -2,7 +2,7 @@
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) {
-        Frame frame = new Frame();
+        MyFrame frame = new MyFrame();
         frame.setVisible(true);
     }
 }
