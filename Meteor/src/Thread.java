@@ -3,9 +3,11 @@ import javax.swing.JLabel;
 
 public class Thread extends java.lang.Thread {
     JLabel label;
+    float velocity;
 
-    public Thread(JLabel label) {
+    public Thread(JLabel label, float velocity) {
         this.label = label;
+        this.velocity = velocity;
     }
 
     @Override
