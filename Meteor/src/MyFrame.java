@@ -6,7 +6,7 @@ import javax.swing.*;
 public class MyFrame extends JFrame {
 
     private JLabel[] meteor;
-    private int meteorCount = 5;
+    private int meteorCount = 0;
     private ImageIcon image;
     private MyThread[] thread;
 
@@ -45,7 +45,7 @@ public class MyFrame extends JFrame {
         }
 
         meteor = new JLabel[this.meteorCount];
-        thread = new MyThread[20];
+        thread = new MyThread[this.meteorCount];
         for (int i = 0; i < meteor.length; i++) {
             int randx = new Random().nextInt(750);
             int randy = new Random().nextInt(750);
