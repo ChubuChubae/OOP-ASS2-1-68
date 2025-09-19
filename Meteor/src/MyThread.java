@@ -2,11 +2,11 @@
 import javax.swing.JLabel;
 
 public class MyThread extends Thread {
-    JLabel label;
-    int velocity;
-    int direction = 1;
-    int dx = 5; // ความเร็วในแนวแกน X
-    int dy = 5; // ความเร็วในแนวแกน Y
+    private JLabel label;
+    private int velocity;
+    private int direction = 1;
+    private int dx = 5; // ความเร็วในแนวแกน X
+    private int dy = 5; // ความเร็วในแนวแกน Y
 
     public MyThread(JLabel label, int velocity) {
         this.label = label;

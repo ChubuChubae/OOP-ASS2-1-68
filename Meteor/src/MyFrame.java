@@ -1,11 +1,10 @@
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
 
 public class MyFrame extends JFrame {
-    JLabel[] meteor;
-    int meteorCount = 5;
+    private JLabel[] meteor;
+    private int meteorCount = 5;
     public MyFrame() {
 
         MyThread []thread = new MyThread[20];
