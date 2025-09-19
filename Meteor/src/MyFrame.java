@@ -1,28 +1,41 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.*;
 
 public class MyFrame extends JFrame {
     JLabel[] meteor;
-
+    int meteorCount = 5;
     public MyFrame() {
+
         MyThread []thread = new MyThread[20];
-        setSize(500, 500);
+        setSize(1000, 1000);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         getContentPane().setBackground(Color.black);
         setLayout(null);
         ImageIcon image = new ImageIcon("././Picture/images.jpg");
-        meteor = new JLabel[2];
-        meteor[0] = new JLabel("123");
-        meteor[0].setForeground(Color.white);
-        meteor[0].setLocation(100,100);
-        meteor[0].setSize(100,100);
-        thread[0] = new MyThread(meteor[0],5);
-        thread[0].start();
-        meteor[0].setIcon(image);
-        add(meteor[0]);
-
+        meteor = new JLabel[this.meteorCount];
+        for(int i = 0 ; i < meteor.length;i++)
+        {   int randx = new Random().nextInt(750);
+            int randy = new Random().nextInt(750);
+            meteor[i] = new JLabel();
+            meteor[i].setLocation(randx,randy);
+            meteor[i].setForeground(Color.white);
+            meteor[i].setSize(200,150);
+            thread[i] = new MyThread(meteor[i],5);
+            thread[i].start();
+            meteor[i].setIcon(image);
+            add(meteor[i]);
+            repaint();
+        }
 
 }
+    public void updateMeteorCount(int newCount) {
+        this.meteorCount = newCount;
+        setTitle("Meteor Display - Count: " + meteorCount);
+        // createMeteors();
+
+    }
+
 }
