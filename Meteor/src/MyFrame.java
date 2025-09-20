@@ -57,7 +57,7 @@ public class MyFrame extends JFrame {
             meteor[i].setIcon(image);
             add(meteor[i]);
 
-            thread[i] = new MyThread(meteor[i], 5);
+            thread[i] = new MyThread(meteor[i], 8);
             thread[i].start();
         }
         repaint();
