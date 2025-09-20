@@ -46,9 +46,12 @@ public class MyFrame extends JFrame {
 
         meteor = new JLabel[this.meteorCount];
         thread = new MyThread[this.meteorCount];
+        int meteorWidth = 200;
+        int meteorHeight = 150;
+
         for (int i = 0; i < meteor.length; i++) {
-            int randx = new Random().nextInt(750);
-            int randy = new Random().nextInt(750);
+            int randx = new Random().nextInt(getWidth() - meteorWidth);
+            int randy = new Random().nextInt(getHeight() - meteorHeight);
             meteor[i] = new JLabel();
             meteor[i].setLocation(randx, randy);
             meteor[i].setForeground(Color.white);
