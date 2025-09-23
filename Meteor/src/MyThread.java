@@ -2,17 +2,17 @@ import javax.swing.JLabel;
 
 public class MyThread extends Thread {
 
-    private JLabel label;
+    private final JLabel label;
     private int velocity;
     private int dx = 5; // ความเร็วในแนวแกน X
     private int dy = 5; // ความเร็วในแนวแกน Y
-    private MyFrame parent;
+    private final MyFrame myframe;
     private boolean exploded = false;
 
-    public MyThread(JLabel label, int velocity, MyFrame parent) {
+    public MyThread(JLabel label, int velocity, MyFrame myframe) {
         this.label = label;
         this.velocity = velocity;
-        this.parent = parent;
+        this.myframe = myframe;
     }
 
     public JLabel getLabel() {
@@ -24,19 +24,18 @@ public class MyThread extends Thread {
         try {
             while (!isInterrupted() && !exploded) {
                 // ตรวจสอบการชนกันก่อนเคลื่อนที่
-                if (parent.checkCollision(label)) {
+                if (myframe.checkCollision(label)) {
                     exploded = true;
 
                     // สร้างเอฟเฟกต์การระเบิด
                     int explosionX = label.getX() + label.getWidth() / 2;
                     int explosionY = label.getY() + label.getHeight() / 2;
-                    parent.createExplosion(explosionX, explosionY);
+                    myframe.createExplosion(explosionX, explosionY);
 
                     // ลบอุกกาบาตที่ระเบิด
-                    parent.removeMeteor(label);
+                    myframe.removeMeteor(label);
                     break;
                 }
-
                 int newX = label.getX() + dx;
                 int newY = label.getY() + dy;
                 int screenWidth = label.getParent().getWidth();
