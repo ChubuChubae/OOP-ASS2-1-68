@@ -60,7 +60,7 @@ public class MyThread extends Thread {
             label.setLocation(newX, newY);
 
             try {
-                Thread.sleep(5 * this.velocity);
+                Thread.sleep(5 * velocity);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
