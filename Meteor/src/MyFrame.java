@@ -10,6 +10,7 @@ public class MyFrame extends JFrame {
     private List<MyThread> threadList;
     private int meteorCount = 0;
     private ImageIcon image;
+    private ImageIcon splash;
 
     public MyFrame() {
         setTitle("Meteor Display - Count: " + meteorCount);
@@ -19,7 +20,7 @@ public class MyFrame extends JFrame {
         getContentPane().setBackground(Color.black);
         setLayout(null);
         image = new ImageIcon("././Picture/images.jpg");
-
+         splash = new ImageIcon("././Picture/splash.jpg");
         meteorList = new ArrayList<>();
         threadList = new ArrayList<>();
 
@@ -43,18 +44,29 @@ public class MyFrame extends JFrame {
         }
         meteorList.clear();
 
-        int meteorWidth = 200;
-        int meteorHeight = 150;
+        // **ขั้นตอนที่ 1: กำหนดขนาดใหม่สำหรับอุกกาบาต**
+        int newMeteorWidth = 100; // กำหนดความกว้างใหม่
+        int newMeteorHeight = 75; // กำหนดความสูงใหม่ (รักษาอัตราส่วนจาก 200x150 เป็น 100x75)
 
         for (int i = 0; i < this.meteorCount; i++) {
-            int randx = new Random().nextInt(getWidth() - meteorWidth);
-            int randy = new Random().nextInt(getHeight() - meteorHeight);
+            int randx = new Random().nextInt(getWidth() - newMeteorWidth);
+            int randy = new Random().nextInt(getHeight() - newMeteorHeight);
+
+            // **ขั้นตอนที่ 2: ปรับขนาดรูปภาพ**
+            Image scaledImage = image.getImage().getScaledInstance(
+                    newMeteorWidth,
+                    newMeteorHeight,
+                    Image.SCALE_SMOOTH // ใช้ SCALE_SMOOTH เพื่อให้ภาพที่ย่อมีคุณภาพดี
+            );
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
             JLabel meteor = new JLabel();
             meteor.setLocation(randx, randy);
             meteor.setForeground(Color.white);
-            meteor.setSize(200, 150);
-            meteor.setIcon(image);
+
+            // **ขั้นตอนที่ 3: ตั้งค่าขนาดของ JLabel ให้ตรงกับขนาดรูปภาพที่ย่อแล้ว**
+            meteor.setSize(newMeteorWidth, newMeteorHeight);
+            meteor.setIcon(scaledIcon);
 
             add(meteor);
             meteorList.add(meteor);
@@ -111,10 +123,15 @@ public class MyFrame extends JFrame {
 
     // เมธอดสำหรับสร้างเอฟเฟกต์การระเบิด
     public void createExplosion(int x, int y) {
-        JLabel explosion = new JLabel("💥");
-        explosion.setFont(new Font("Arial", Font.BOLD, 50));
-        explosion.setForeground(Color.ORANGE);
-        explosion.setBounds(x, y, 100, 100);
+        JLabel explosion = new JLabel();
+        // Scale the splash image to fit a smaller size (e.g., 100x100)
+        Image scaledSplash = splash.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+        explosion.setIcon(new ImageIcon(scaledSplash));
+        explosion.setSize(100, 100); // Set the size for the JLabel
+
+        // Center the explosion relative to the collision point (x, y)
+        explosion.setLocation(x - 50, y - 50); // Assuming x, y is the top-left of the meteor, adjust as needed for collision center
+
         add(explosion);
         repaint();
 
