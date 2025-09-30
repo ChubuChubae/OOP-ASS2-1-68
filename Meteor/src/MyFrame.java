@@ -2,6 +2,7 @@ import java.awt.*;
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
 import javax.swing.*;
 
 public class MyFrame extends JFrame {
@@ -11,6 +12,7 @@ public class MyFrame extends JFrame {
     private int meteorCount = 0;
     private ImageIcon image;
     private ImageIcon splash;
+    private List<ImageIcon> images; // รายการภาพอุกกาบาตทั้งหมด
 
     public MyFrame() {
         setTitle("Meteor Display - Count: " + meteorCount);
@@ -20,11 +22,47 @@ public class MyFrame extends JFrame {
         getContentPane().setBackground(Color.black);
         setLayout(null);
         image = new ImageIcon("././Picture/images.jpg");
-         splash = new ImageIcon("././Picture/splash.jpg");
+        splash = new ImageIcon("././Picture/splash.jpg");
+
+        // โหลดภาพจากโฟลเดอร์
+        images = loadImagesFromFolder("././Picture/meteor/");
+
         meteorList = new ArrayList<>();
         threadList = new ArrayList<>();
 
         createMeteor();
+    }
+
+    // เมธอดสำหรับโหลดภาพทั้งหมดจากโฟลเดอร์
+    private List<ImageIcon> loadImagesFromFolder(String folderPath) {
+        List<ImageIcon> imageList = new ArrayList<>();
+        File folder = new File(folderPath);
+        if (!folder.exists() || !folder.isDirectory()) {
+            return null;
+        }
+        File[] files = folder.listFiles((dir, name) -> {
+            String lowerName = name.toLowerCase();
+            return lowerName.endsWith(".jpg")
+                    || lowerName.endsWith(".jpeg")
+                    || lowerName.endsWith(".png")
+                    || lowerName.endsWith(".gif");
+        });
+        if (files != null && files.length > 0) {
+            for (File file : files) {
+                ImageIcon img = new ImageIcon(file.getAbsolutePath());
+                imageList.add(img);
+            }
+        }
+        return imageList.isEmpty() ? null : imageList;
+    }
+
+    // เมธอดสำหรับสุ่มเลือกภาพ
+    private ImageIcon getRandomImage(List<ImageIcon> imageList) {
+        if (imageList == null || imageList.isEmpty()) {
+            return null;
+        }
+        int randomIndex = new Random().nextInt(imageList.size());
+        return imageList.get(randomIndex);
     }
 
     private void createMeteor() {
@@ -44,19 +82,24 @@ public class MyFrame extends JFrame {
         }
         meteorList.clear();
 
-        // **ขั้นตอนที่ 1: กำหนดขนาดใหม่สำหรับอุกกาบาต**
-        int newMeteorWidth = 100; // กำหนดความกว้างใหม่
-        int newMeteorHeight = 75; // กำหนดความสูงใหม่ (รักษาอัตราส่วนจาก 200x150 เป็น 100x75)
+        // กำหนดขนาดใหม่สำหรับอุกกาบาต
+        int newMeteorWidth = 100;
+        int newMeteorHeight = 75;
 
         for (int i = 0; i < this.meteorCount; i++) {
             int randx = new Random().nextInt(getWidth() - newMeteorWidth);
             int randy = new Random().nextInt(getHeight() - newMeteorHeight);
 
-            // **ขั้นตอนที่ 2: ปรับขนาดรูปภาพ**
-            Image scaledImage = image.getImage().getScaledInstance(
+            // เลือกภาพแบบสุ่ม (ถ้าโหลดภาพสำเร็จ จะใช้ภาพจากโฟลเดอร์ ถ้าไม่ใช้ภาพเดิม)
+            ImageIcon currentImage = (images != null && !images.isEmpty())
+                    ? getRandomImage(images)
+                    : image;
+
+            // ปรับขนาดรูปภาพ
+            Image scaledImage = currentImage.getImage().getScaledInstance(
                     newMeteorWidth,
                     newMeteorHeight,
-                    Image.SCALE_SMOOTH // ใช้ SCALE_SMOOTH เพื่อให้ภาพที่ย่อมีคุณภาพดี
+                    Image.SCALE_SMOOTH
             );
             ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
@@ -64,7 +107,7 @@ public class MyFrame extends JFrame {
             meteor.setLocation(randx, randy);
             meteor.setForeground(Color.white);
 
-            // **ขั้นตอนที่ 3: ตั้งค่าขนาดของ JLabel ให้ตรงกับขนาดรูปภาพที่ย่อแล้ว**
+            // ตั้งค่าขนาดของ JLabel ให้ตรงกับขนาดรูปภาพที่ย่อแล้ว
             meteor.setSize(newMeteorWidth, newMeteorHeight);
             meteor.setIcon(scaledIcon);
 
@@ -101,7 +144,6 @@ public class MyFrame extends JFrame {
 
     // เมธอดสำหรับลบอุกกาบาตที่ระเบิด
     public synchronized void removeMeteor(JLabel meteor) {
-        //Swinguntility Invokelater
         if (meteorList.contains(meteor)) {
             remove(meteor);
             meteorList.remove(meteor);
@@ -124,13 +166,11 @@ public class MyFrame extends JFrame {
     // เมธอดสำหรับสร้างเอฟเฟกต์การระเบิด
     public void createExplosion(int x, int y) {
         JLabel explosion = new JLabel();
-        // Scale the splash image to fit a smaller size (e.g., 100x100)
         Image scaledSplash = splash.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         explosion.setIcon(new ImageIcon(scaledSplash));
-        explosion.setSize(100, 100); // Set the size for the JLabel
+        explosion.setSize(100, 100);
 
-        // Center the explosion relative to the collision point (x, y)
-        explosion.setLocation(x - 50, y - 50); // Assuming x, y is the top-left of the meteor, adjust as needed for collision center
+        explosion.setLocation(x - 50, y - 50);
 
         add(explosion);
         repaint();
