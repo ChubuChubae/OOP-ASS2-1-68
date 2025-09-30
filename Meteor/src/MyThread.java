@@ -1,3 +1,4 @@
+
 import javax.swing.JLabel;
 import java.util.Random;
 
@@ -5,8 +6,8 @@ public class MyThread extends Thread {
 
     private final JLabel label;
     private int velocity;
-    private int dx = 5; // ความเร็วในแนวแกน X
-    private int dy = 5; // ความเร็วในแนวแกน Y
+    private int dx = 5;
+    private int dy = 5;
     private final MyFrame myframe;
     private boolean exploded = false;
 
@@ -24,16 +25,13 @@ public class MyThread extends Thread {
     public void run() {
         try {
             while (!isInterrupted() && !exploded) {
-                // ตรวจสอบการชนกันก่อนเคลื่อนที่
                 if (myframe.checkCollision(label)) {
                     exploded = true;
 
-                    // สร้างเอฟเฟกต์การระเบิด
                     int explosionX = label.getX() + label.getWidth() / 2;
                     int explosionY = label.getY() + label.getHeight() / 2;
                     myframe.createExplosion(explosionX, explosionY);
 
-                    // ลบอุกกาบาตที่ระเบิด
                     myframe.removeMeteor(label);
                     break;
                 }
@@ -42,7 +40,6 @@ public class MyThread extends Thread {
                 int screenWidth = label.getParent().getWidth();
                 int screenHeight = label.getParent().getHeight();
 
-                // ตรวจสอบการชนขอบหน้าจอ
                 if (newY <= 0) {
                     newY = 0;
                     dy *= -1;
@@ -80,7 +77,6 @@ public class MyThread extends Thread {
                 Thread.sleep(5 * velocity);
             }
         } catch (InterruptedException e) {
-            // Thread ถูกขัดจังหวะ ให้หยุดทำงาน
             exploded = true;
         }
     }

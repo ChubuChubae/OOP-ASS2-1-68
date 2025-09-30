@@ -36,10 +36,10 @@ public class Amount extends JFrame {
         try {
             parsedAmount = Integer.parseInt(amountString);
 
-            System.out.println("Parsed amount: " + parsedAmount); // debug
+            System.out.println("Parsed amount: " + parsedAmount);
             if (myFrame != null) {
                 myFrame.updateMeteorCount(parsedAmount);
-                System.out.println("Sent to MyFrame successfully."); // debug
+                System.out.println("Sent to MyFrame successfully.");
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this,
