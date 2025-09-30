@@ -113,8 +113,9 @@ public class MyFrame extends JFrame {
 
             add(meteor);
             meteorList.add(meteor);
+            Random rand = new Random();
 
-            MyThread thread = new MyThread(meteor, 8, this);
+            MyThread thread = new MyThread(meteor,rand.nextInt(6)+5 , this);
             threadList.add(thread);
             thread.start();
         }

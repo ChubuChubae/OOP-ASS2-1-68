@@ -1,4 +1,5 @@
 import javax.swing.JLabel;
+import java.util.Random;
 
 public class MyThread extends Thread {
 
